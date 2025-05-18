@@ -1,16 +1,16 @@
 <center>
 
-## **Smart News Crawl & QA**
+# **Smart News Crawl & QA**
 
 </center>
 
 ---
 
-# NewsScraper
+## NewsScraper
 
 A Python-based asynchronous web scraper for extracting news articles from a specified website using `crawl4ai` and `BeautifulSoup`.
 
-## Steps / Operations Performed
+### Steps / Operations Performed
 
 1. **Input Website URL**  
    Prompt the user to enter the base URL of a news website to scrape.
@@ -44,7 +44,7 @@ A Python-based asynchronous web scraper for extracting news articles from a spec
 8. **Completion Message**  
    Display the total number of articles saved.
 
-## Notes
+### Notes
 
 - Scraping is performed asynchronously for efficiency.
 - Only internal links within the same domain are followed.
@@ -53,9 +53,9 @@ A Python-based asynchronous web scraper for extracting news articles from a spec
 
 -------------------------------------------------------------------------------------------------------
 
-# News Article Processing and Agentic QA Pipeline
+## News Article Processing and Agentic QA Pipeline
 
-## Steps / Operations Performed
+### Steps / Operations Performed
 
 1. **Load environment variables**  
    Load OpenAI API key and other settings from `.env` file.
