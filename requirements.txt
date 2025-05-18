@@ -1,0 +1,9 @@
+crawl4ai
+beautifulsoup4
+requests
+scikit-learn
+langchain-community
+langchain
+langchain-openai
+python-dotenv
+faiss-cpu
