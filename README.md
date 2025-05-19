@@ -98,4 +98,4 @@ A Python-based asynchronous web scraper for extracting news articles from a spec
 This pipeline enables agentic interaction with news data from raw ingestion through embedding, retrieval, and structured or summarization-based response generation.
 
 ### License
-<span style="color: #00FF00; font-weight: bold;">MSIS, Manipal</span>
+🟩 **MSIS, Manipal**
