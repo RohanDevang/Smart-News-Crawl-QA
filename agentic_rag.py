@@ -34,7 +34,7 @@ def create_vectorstore(docs):
     openai_api_key = os.getenv("OPENAI_API_KEY")
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
     vectorstore = FAISS.from_documents(docs, embeddings)
-    return vectorstore.as_retriever(search_kwargs={"k": 4})
+    return vectorstore.as_retriever(search_kwargs={"k": 5})
 
 # Step 4: Setup RAG QA Chain
 def build_qa_chain(retriever):
@@ -101,38 +101,47 @@ if __name__ == '__main__':
     raw_docs = load_news_articles(json_file)
     split_docs = split_documents(raw_docs)
 
-    print("🧠 Creating Retriever with top k=4...")
+    print("🧠 Creating Retriever with top k = 5...")
     retriever = create_vectorstore(split_docs)
 
     print("🤖 Setting up \033[92mRAG\033[0m pipeline with LLM...")
-    qa = build_qa_chain(retriever)
     openai_api_key = os.getenv("OPENAI_API_KEY")
     llm = ChatOpenAI(model_name="gpt-4o", temperature=0, openai_api_key=openai_api_key)
+    qa = build_qa_chain(retriever)
 
-    print("\n🤖 Choose mode: [1] Agentic Summarizer, [2] Agentic Q&A mode, [3] Agentic JSON Context QA")
-    mode = input("Enter your choice (1, 2 or 3): ")
+    while True:
+        print("\n🤖 Choose mode: [\033[1;92m1\033[0m] Agentic Summarizer, "
+              "[\033[1;92m2\033[0m] Agentic Q&A mode, "
+              "[\033[1;92m3\033[0m] Agentic JSON Context QA, "
+              "[\033[1;91m0\033[0m] Exit")
+        mode = input("Enter your choice (1, 2, 3 or 0 to exit): ").strip().lower()
 
-    if mode.strip() == '1':
-        print("\n📰 Generating summary of latest news...")
-        summary = summarize_news(raw_docs)
-        print(f"\n📝 \033[93mNews Summary:\033[0m \n {summary}\n")
+        if mode in ['0', 'exit', 'quit']:
+            print("\n👋 Exiting the program. Goodbye!\n")
+            break
 
-    elif mode.strip() == '2':
-        while True:
-            query = input("\n\033[93mAsk a question about the 'NEWS' or type 'quit': \033[0m")
-            if query.lower() in ['exit', 'quit']:
-                break
-            result = qa.invoke({"query": query})
-            print(f"\n\033[92mAnswer:\033[0m {result['result']}")
+        elif mode == '1':
+            print("\n📰 Generating summary of latest news...")
+            summary = summarize_news(raw_docs)
+            print(f"\n📝 \033[93mNews Summary:\033[0m \n {summary}\n")
 
-    elif mode.strip() == '3':
-        while True:
-            query = input("\nAsk a question about the news or type 'exit': ")
-            if query.lower() in ['exit', 'quit']:
-                break
-            top_docs = retriever.invoke(query)
-            answer = generate_precise_answer(llm, top_docs, query)
-            print(f"\n🧾 JSON Answer:\n{answer}")
+        elif mode == '2':
+            print("\033[1;92mAgentic Q&A mode\033[0m")
+            while True:
+                query = input("\n\033[93mAsk a question about the 'NEWS' or type 'quit': \033[0m")
+                if query.lower() in ['exit', 'quit']:
+                    break
+                result = qa.invoke({"query": query})
+                print(f"\n\033[92mAnswer:\033[0m {result['result']}")
 
-    else:
-        print("❌ Invalid choice. Please restart and choose 1, 2, or 3.")
+        elif mode == '3':
+            print("\033[1;92mAgentic JSON Context QA\033[0m")
+            while True:
+                query = input("\n\033[93mAsk a question about the 'NEWS' for JSON or type 'quit': \033[0m")
+                if query.lower() in ['exit', 'quit']:
+                    break
+                top_docs = retriever.invoke(query)
+                answer = generate_precise_answer(llm, top_docs, query)
+                print(f"\n🧾 \033[93mJSON Answer:\033[0m\n\n{answer}")
+        else:
+            print("\n❌ Invalid choice. Please enter 1, 2, 3, or 0 to exit.")
