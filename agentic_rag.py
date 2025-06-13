@@ -97,7 +97,7 @@ Provide your response in the following JSON format:
 if __name__ == '__main__':
     json_file = 'scraped_news.json'
 
-    print("\n🔄 Loading and preparing news data...")
+    print("\n🔄 Loading and preparing NEWS data...")
     raw_docs = load_news_articles(json_file)
     split_docs = split_documents(raw_docs)
 
